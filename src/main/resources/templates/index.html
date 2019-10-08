@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<title>秒杀系统</title>
+	<link rel="stylesheet" href="/css/style1.css">
+	<link href="css/popup-box.css" rel="stylesheet" type="text/css" media="all" />
+	<!--<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300italic,300,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+	<link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+-->
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="Sign In And Sign Up Forms  Widget Responsive, Login Form Web Template, Flat Pricing Tables, Flat Drop-Downs, Sign-Up Web Templates, Flat Web Templates, Login Sign-up Responsive Web Template, Smartphone Compatible Web Template, Free Web Designs for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design" />
+	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+	<script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+	<script th:src="@{/js/md5.js}"></script>
+	<script th:src="@{/js/jquery.magnific-popup.js}" type="text/javascript"></script>
+	<script type="text/javascript" th:src="@{/js/modernizr.custom.53451.js}"></script>
+	<script>
+        $(document).ready(function() {
+            $('.popup-with-zoom-anim').magnificPopup({
+                type: 'inline',
+                fixedContentPos: false,
+                fixedBgPos: true,
+                overflowY: 'auto',
+                closeBtnInside: true,
+                preloader: false,
+                midClick: true,
+                removalDelay: 300,
+                mainClass: 'my-mfp-zoom-in'
+            });
+
+        });
+	</script>
+
+</head>
+<body>
+<script th:src="@{/js/mycanvas.js}" type="text/javascript"></script>
+<h1 style="color: hotpink">登录/注册</h1>
+<div class="w3layouts">
+	<div class="signin-agile">
+		<h2>登录
+		</h2>
+		<form method="post" id="login">
+			<div id="checkLogMsg" style="text-align: center"></div>
+			<input type="text" id="logUserAccount" name="user_account" class="name" placeholder="账号" required="">
+			<input type="password" id="logUserPassword" name="user_pwd" class="password" placeholder="密码" required="">
+			<ul>
+				<li>
+					<input type="checkbox" id="brand1" value="">
+					<label for="brand1"><span></span>记住密码</label>
+				</li>
+			</ul>
+			<a href="#">忘记密码?</a><br>
+			<div class="clear"></div>
+			<input  type="submit" value="登录" id="logBtn">
+
+		</form>
+	</div>
+	<div class="signup-agileinfo">
+		<h3>报名</h3>
+		<p>表单在网页应用中十分重要，今天我要向大家分享一款基于HMLT5的分步骤注册表单，表单外观比较华丽，点击下一步按钮即可跳转到下一步填写注册信息。改HTML5表单使用了很多CSS3属性，从而在表单切换时拥有弹性的动画，是一款很不错的HTML5表单。</p>
+		<div class="more">
+			<a class="book popup-with-zoom-anim button-isi zoomIn animated" data-wow-delay=".5s" href="#small-dialog">点击注册</a>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="footer-w3l">
+	<p class="agileinfo"> 2016登录和注册表单。版权所有  <a href="http://www.mycodes.net/" target="_blank">源码之家</a>
+	</p>
+</div>
+<div class="pop-up">
+	<div id="small-dialog" class="mfp-hide book-form">
+		<h3>注册表单 </h3>
+		<form id="regist_form" action="user/do_regist" method="post">
+			<input type="text" id="userName" name="user_name" placeholder="昵称:任意1-6个字符" required="" />
+            <div id="checkNameMsg" style="text-align: center"></div>
+            <input type="text" id="account" name="user_account" placeholder="账号:必须是字母和数字组成,8-15位" required="" />
+            <div id="checkAccountMsg" style="text-align: center"></div>
+			<input type="text" id="user_email"name="user_email" class="email" placeholder="邮箱:例xxxxx@qq.com" required=""/>
+			<div id="checkEmailMsg" style="text-align: center"></div>
+			<input type="password" id="password1" name="user_pwd" class="password" placeholder="密码" required=""/>
+            <input type="hidden" id="passwordChange">
+			<div id="checkPasswordMsg1" style="text-align: center"></div>
+            <input type="password" id="password2"name="Password" class="password" placeholder="重复密码" required=""/>
+			<div id="checkPasswordMsg2" style="text-align: center"></div>
+			<input type="submit" style="{background: gray}" id="registBtn" value="点击注册">
+		</form>
+	</div>
+</div>
+</body>
+
+<script>
+    $(function () {
+        var  status=0;
+        $('#registBtn').attr('disabled',"true");
+        $('#registBtn').css({"background":"grey"});
+        //昵称校验
+        $("#userName").blur(function (){
+            var userName = $("#userName").val();
+            if(!/^[\u4e00-\u9fa5\w-]{1,6}$/.test(userName)) {
+                $("#checkNameMsg").html("任意1-6个字符").css({color: "red"});
+                // $("#account").attr("disabled","disabled");
+                // $("#password1").attr("disabled","disabled");
+                // $("#password2").attr("disabled","disabled");
+                // $("#user_email").attr("disabled","disabled");
+                $('#registBtn').attr('disabled',"true");
+                $('#registBtn').css({"background":"grey"})
+            }else {
+                $("#checkNameMsg").html(" ");
+                // $("#account").removeAttr("disabled");
+                // $("#password1").removeAttr("disabled");
+                // $("#password2").removeAttr("disabled");
+                // $("#user_email").removeAttr("disabled");
+				if (/^(?![^A-z]+$)(?!\D+$)[A-z\d]{8,15}$/.test($("#account").val())
+				){
+                    if (status!=1) {
+                        $('#registBtn').removeAttr("disabled");
+                        $('#registBtn').css({"background": "hotpink"})
+                    }
+				}
+
+            }
+        });
+        //账号校验
+        $("#account").blur(function () {
+            var user_account = $(this).val();
+            if(!/^(?![^A-z]+$)(?!\D+$)[A-z\d]{8,15}$/.test(user_account)){
+                $("#checkAccountMsg").html("必须是字母和数字组成,8-15位").css({color:"red"});
+                $('#registBtn').attr('disabled',"true");
+                $('#registBtn').css({"background":"grey"})
+            }
+            else {
+                $.ajax({
+                    url:"/user/do_checkUserName",
+                    data:{user_account:user_account},
+                    type:"post",
+                    success:function (result) {
+                        //数据解析
+                        // alert(result);
+                        if (result) {
+                            $("#checkAccountMsg").html("该账号已经被注册了").css({color:"red"});
+                            status=1;
+                            $('#registBtn').attr('disabled',"true");
+                            $('#registBtn').css({"background":"grey"})
+
+                        } else {
+                            status=0;
+                            $("#checkAccountMsg").html(" ");
+                            if (/^(([^()[\]\\.,;:\s@\"]+(\.[^()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test($("#user_email").val())) {
+                                $('#registBtn').removeAttr("disabled");
+                                $('#registBtn').css({"background":"hotpink"});
+							}
+
+                        }
+                    }
+                });
+
+            };
+
+        });
+        //邮箱验证
+        $("#user_email").blur(function (){
+            var eValue = $("#user_email").val();
+            if(!/^(([^()[\]\\.,;:\s@\"]+(\.[^()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(eValue)){
+                $("#checkEmailMsg").html("邮箱格式不合理").css({color:"red"});
+
+                $('#registBtn').attr('disabled',"true");
+                $('#registBtn').css({"background":"grey"})
+            }else {
+                $("#checkEmailMsg").html(" ");
+                if (/(?=.{6,17})(?=.*\d)(?=.*[a-z])[\x20-\x7f]*/.test($("#password1").val())) {
+                    if (status!=1) {
+                        $('#registBtn').removeAttr("disabled");
+                        $('#registBtn').css({"background": "hotpink"})
+                    }
+				}
+            }
+        });
+        //密码校验
+        $("#password1").blur(function () {
+            var password1 = $(this).val();
+            if(!/(?=.{6,17})(?=.*\d)(?=.*[a-z])[\x20-\x7f]*/.test(password1)){
+                $("#checkPasswordMsg1").html("必含有数字和字母，可有英文符号，6-17位").css({color:"red"});
+                $('#registBtn').attr('disabled',"true");
+                $('#registBtn').css({"background":"grey"});
+                return false;
+            }
+            else {
+                $("#checkPasswordMsg1").html(" ").css({color:"red"});
+                if (/(?=.{6,17})(?=.*\d)(?=.*[a-z])[\x20-\x7f]*/.test($("#password2").val())) {
+                    if (status!=1) {
+                        $('#registBtn').removeAttr("disabled");
+                        $('#registBtn').css({"background": "hotpink"})
+                    }
+				}
+
+            }});
+        //重复密码校验
+        $("#password2").blur(function () {
+            var pValue1=$("#password1").val();
+            var pValue2=$("#password2").val();
+            if(!/(?=.{6,17})(?=.*\d)(?=.*[a-z])[\x20-\x7f]*/.test(pValue2)){
+                $("#checkPasswordMsg2").html("必含有数字和字母，可有英文符号，6-17位").css({color:"red"});
+                $('#registBtn').attr('disabled',"true");
+                $('#registBtn').css({"background":"grey"});
+                return false;
+            }
+            else {
+                if (pValue1 == pValue2) {
+                        $("#checkPasswordMsg2").html(" ");
+                    if (status!=1) {
+                        $('#registBtn').removeAttr("disabled");
+                        $('#registBtn').css({"background": "hotpink"})
+                    }
+                } else {
+                    $("#checkPasswordMsg2").html("两次密码不一致").css({color: "red"});
+					if (/(?=.{6,17})(?=.*\d)(?=.*[a-z])[\x20-\x7f]*/.test($("#password1").val())){
+                        $('#registBtn').attr('disabled', "true");
+                        $('#registBtn').css({"background": "grey"});
+                    }
+                }
+            }
+        })
+
+        //登录
+        $("#logBtn").click(function () {
+            var user_account = $("#logUserAccount").val();
+            var pwd=$("#logUserPassword").val();
+            var str = salt.charAt(3) + salt.charAt(9) + pwd +salt.charAt(5);
+            var newPassword = $.md5(str);
+            $.ajax({
+                url:"/user/login",
+                data:{user_account:user_account,user_pwd:newPassword},
+                type:"post",
+                success:function (result) {
+                    //数据解析
+                    // alert(result);
+                    if (result) {
+                        $("#checkLogMsg").html("成功");
+                        window.location.href = "/listProducts";
+                    } else {
+                        $("#checkLogMsg").html("用户名或密码错误").css({color:"red"});
+                    }
+                }
+            });
+        });
+
+        // <!--焦点获得时改变背景颜色-->
+        $("input").focus(function () {
+            $(this).css({"background":"hotpink"})
+        })
+        $("input").blur(function () {
+            $(this).css({"background":"white"})
+        });
+        //登录禁用submit
+        $("#login").submit(function () {
+            return false;
+        })
+
+
+        //注册加密
+
+        //注册禁用submit
+        $("#regist_form").submit(function () {
+            return false;
+        })
+        $("#registBtn").click(function () {
+            var pValue1=$("#password2").val();
+            var password = $("#password1").val();
+            var str = salt.charAt(3) + salt.charAt(9) + password +salt.charAt(5);
+            var newPassword = $.md5(str);
+            $("#passwordChange").val(newPassword);
+            $.ajax({
+                url:"user/do_regist",
+                data:{user_name:$("#userName").val(),user_account:$("#account").val(),
+                    user_email:$("#user_email").val(),user_pwd:$("#passwordChange").val()},
+                type:"post",
+                success:function (result) {
+                    //数据解析
+                    // alert(result);
+                    if (result) {
+                        $('.mfp-close').trigger("click");
+                        alert("注册成功可以登录啦！")
+                    } else {
+                        alert("未知错误请从新注册！")
+                    }
+                }
+            });
+        });
+
+    });
+</script>
+</html>

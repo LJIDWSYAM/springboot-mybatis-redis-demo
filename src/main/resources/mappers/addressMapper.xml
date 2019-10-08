@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjl.springbootmybatis.dao.AddressDao">
+    <select id="selectAddressInfoByAddress_id" parameterType="String" resultType="Address">
+        select * from address where address_id=#{address_id}
+    </select>
+
+    <insert id="insertAddress" parameterType="Address">
+        insert into address (reciver_name,reciver_phone,reciver_address,post_no,user_account)
+        values (#{reciver_name},#{reciver_phone},#{reciver_address},#{post_no},#{user_account})
+    </insert>
+</mapper>

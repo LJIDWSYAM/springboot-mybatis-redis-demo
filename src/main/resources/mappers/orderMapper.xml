@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjl.springbootmybatis.dao.OrderDao">
+
+        <!--<resultMap id="selectMiaoshaGoodsByMap" type="miaoshaGoods">-->
+            <!--<id column="miaoshagoods_id" property="miaoshagoods_id"></id>-->
+            <!--<result column="goods_id" property="goods_id"></result>-->
+            <!--<result column="miaosha_price" property="miaosha_price"></result>-->
+            <!--<result column="miaosha_stock" property="miaosha_stock"></result>-->
+            <!--<result column="begin_time" property="begin_time"></result>-->
+            <!--<result column="end_time" property="end_time"></result>-->
+            <!--<association property="goods" javaType="Goods">-->
+                <!--<id column="goods_id" property="goods_id"></id>-->
+                <!--<result column="goods_name" property="goods_name"></result>-->
+                <!--<result column="goods_price" property="goods_price"></result>-->
+                <!--<result column="goods_desc" property="goods_desc"></result>-->
+                <!--<result column="goods_stock" property="goods_stock"></result>-->
+                <!--<result column="goods_img" property="goods_img"></result>-->
+            <!--</association>-->
+        <!--</resultMap>-->
+
+    <resultMap id="selectAllInfoByOrderNoByMap" type="OrderInfoVo">
+        <id column="order_id" property="order_id"></id>
+        <result column="order_no" property="order_no"></result>
+        <result column="address_id" property="address_id"></result>
+        <result column="miaoshagoods_id" property="miaoshagoods_id"></result>
+        <result column="user_account" property="user_account"></result>
+        <result column="create_time" property="create_time"></result>
+        <result column="pay_time" property="pay_time"></result>
+        <result column="buy_count" property="buy_count"></result>
+        <result column="order_pay_no" property="order_pay_no"></result>
+        <association property="goods" javaType="Goods">
+        <id column="goods_id" property="goods_id"></id>
+        <result column="goods_name" property="goods_name"></result>
+        <result column="goods_price" property="goods_price"></result>
+        <result column="goods_desc" property="goods_desc"></result>
+        <result column="goods_stock" property="goods_stock"></result>
+        <result column="goods_img" property="goods_img"></result>
+        </association>
+        <association property="miaoshaGoods" javaType="miaoshaGoods">
+            <id column="miaoshagoods_id" property="miaoshagoods_id"></id>
+            <result column="goods_id" property="goods_id"></result>
+            <result column="miaosha_price" property="miaosha_price"></result>
+            <result column="miaosha_stock" property="miaosha_stock"></result>
+            <result column="begin_time" property="begin_time"></result>
+            <result column="end_time" property="end_time"></result>
+        </association>
+        <association property="address" javaType="Address">
+            <id column="address_id" property="address_id"></id>
+            <result column="reciver_name" property="reciver_name"></result>
+            <result column="reciver_phone" property="reciver_phone"></result>
+            <result column="reciver_address" property="reciver_address"></result>
+            <result column="post_no" property="post_no"></result>
+            <result column="user_account" property="user_account"></result>
+        </association>
+    </resultMap>
+
+
+    <select id="selectAddressByUserAccount" parameterType="String" resultType="Address">
+      select * from address where user_account=#{user_account}
+    </select>
+
+    <update id="reduceMiaoshaGoodsNum" parameterType="String">
+        update miaosha_goods set miaosha_stock = miaosha_stock -1 where miaoshagoods_id =#{miaoshagoods_id}
+    </update>
+    <insert id="insertOrderInfo" parameterType="OrderInfo">
+        insert into orderinfo(order_no,address_id,miaoshagoods_id,user_account,create_time,buy_count)
+        VALUES(#{order_no},#{address_id},#{miaoshagoods_id},#{user_account},#{create_time},#{buy_count})
+    </insert>
+
+    <select id="selectAllInfoByOrderNo" parameterType="String" resultMap="selectAllInfoByOrderNoByMap">
+      SELECT * FROM orderinfo o join address a on o.user_account=a.user_account and o.address_id= a.address_id
+      join miaosha_goods m on o.miaoshagoods_id=m.miaoshagoods_id
+      join goods g on g.goods_id= m.goods_id WHERE o.order_no=#{order_no}
+    </select>
+
+</mapper>
