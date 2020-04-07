@@ -62,4 +62,8 @@ public class OrderServiceImpl implements OrderService {
         orderDao.insertOrderInfo(orderInfo);
     }
 
+    @Override
+    public void updateOrder(OrderInfoVo orderInfoVo) {
+        orderDao.updateOrder(orderInfoVo);
+    }
 }

@@ -17,4 +17,5 @@ public interface OrderService {
     void insertOrderInfo(OrderInfo orderInfo);
     OrderInfo insertOnderInfoANDreduceMiaoshaGoodsNum(String miaoshagoodsId,String user_account,String address_id);
     OrderInfoVo selectAllInfoByOrderNo(String order_no);
+    void updateOrder(OrderInfoVo orderInfoVo);
 }

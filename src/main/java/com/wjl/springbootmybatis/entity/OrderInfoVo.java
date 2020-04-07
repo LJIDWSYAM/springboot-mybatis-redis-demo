@@ -12,6 +12,24 @@ import java.util.Date;
  * \
  */
 public class OrderInfoVo {
+    @Override
+    public String toString() {
+        return "OrderInfoVo{" +
+                "order_id=" + order_id +
+                ", order_no='" + order_no + '\'' +
+                ", address_id=" + address_id +
+                ", miaoshagoods_id=" + miaoshagoods_id +
+                ", user_account='" + user_account + '\'' +
+                ", create_time=" + create_time +
+                ", pay_time=" + pay_time +
+                ", buy_count=" + buy_count +
+                ", order_pay_no='" + order_pay_no + '\'' +
+                ", address=" + address +
+                ", miaoshaGoods=" + miaoshaGoods +
+                ", goods=" + goods +
+                '}';
+    }
+
     private int order_id;
     private String order_no;
     private int address_id;

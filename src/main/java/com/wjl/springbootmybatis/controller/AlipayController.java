@@ -17,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -52,27 +54,23 @@ public class AlipayController {
 //        OrderInfo orderInfo= (OrderInfo) request.getAttribute("orderInfo");
 
 //        OrderInfo orderInfo = orderService.getOrderInfoByOrderNo(orderNo);
-
-        // 模拟从前台传来的数据
+//       模拟从前台传来的数据
 ////        String orderNo = orderInfo.getOrderNo(); // 生成订单号
 //        String totalAmount = String.valueOf(orderInfo.getMiaoShaGoods().getMiaosha_price()); // 支付总金额
 //        String subject = "商品秒杀订单"; // 订单名称
 //        String body = orderInfo.getMiaoShaGoods().getGoods().getGoods_desc(); // 商品描述
         OrderInfoVo orderInfoVo=orderService.selectAllInfoByOrderNo(order_no);
-        session.setAttribute("orderInfoVo",orderInfoVo);
         String orderNo =orderInfoVo.getOrder_no();//订单编号
         String totalAmount =String.valueOf(orderInfoVo.getMiaoshaGoods().getMiaosha_price());//总价格
         String subject = orderInfoVo.getGoods().getGoods_name(); // 订单名称
         String body = orderInfoVo.getGoods().getGoods_desc();//订单描述
-
-
-
         // 封装请求客户端
-        AlipayClient client = new DefaultAlipayClient(url, app_id, private_key, format, charset, public_key, signtype);
+        AlipayClient client = new DefaultAlipayClient(url, app_id, private_key,
+                format, charset, public_key, signtype);
         String path = request.getRequestURI();
-        System.out.println(path);
         path = path.substring(0, path.lastIndexOf("/"));
-        String resulturl = "http://localhost:8080/" + path + return_url;
+//        String resulturl = "http://localhost:8080/" + path + return_url;
+        String resulturl = path + return_url;
         // 支付请求
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
         alipayRequest.setReturnUrl(resulturl);
@@ -102,7 +100,6 @@ public class AlipayController {
     @RequestMapping("/returnUrl")
     public ModelAndView returnUrl(HttpServletRequest request,HttpSession session) throws Exception {
         ModelAndView mav = new ModelAndView();
-
         // 获取支付宝GET过来反馈信息（官方固定代码）
         Map<String, String> params = new HashMap<String, String>();
         Map<String, String[]> requestParams = request.getParameterMap();
@@ -121,12 +118,14 @@ public class AlipayController {
         if (signVerified) {
             String orderNo = params.get("out_trade_no");
             String alipayNo = params.get("trade_no");
-
-//            OrderInfo orderInfo = new OrderInfo();
-//            orderInfo.setOrderNo(orderNo);
-//            orderInfo.setAlipayNo(alipayNo);
-//            orderService.updateOrder(orderInfo);
-            System.out.println("前往支付成功页面");
+            OrderInfoVo orderInfoVo = new OrderInfoVo();
+            orderInfoVo.setOrder_no(orderNo);
+            orderInfoVo.setOrder_pay_no(alipayNo);
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            orderInfoVo.setPay_time(df.parse(df.format(new Date())));// new Date()为获取当前系统时间
+            orderService.updateOrder(orderInfoVo);
+            OrderInfoVo orderInfoVo2=orderService.selectAllInfoByOrderNo(orderNo);
+            session.setAttribute("orderInfoVo",orderInfoVo2);
             mav.setViewName("redirect:/orderInfo");
         } else {
             System.out.println("前往支付失败页面");

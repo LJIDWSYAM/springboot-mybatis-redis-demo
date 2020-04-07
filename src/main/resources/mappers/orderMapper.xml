@@ -59,11 +59,15 @@
 
 
     <select id="selectAddressByUserAccount" parameterType="String" resultType="Address">
-      select * from address where user_account=#{user_account}
+      select *
+      from address
+      where user_account=#{user_account}
     </select>
 
     <update id="reduceMiaoshaGoodsNum" parameterType="String">
-        update miaosha_goods set miaosha_stock = miaosha_stock -1 where miaoshagoods_id =#{miaoshagoods_id}
+        update miaosha_goods
+        set miaosha_stock = miaosha_stock -1
+        where miaoshagoods_id =#{miaoshagoods_id} and miaosha_stock>0
     </update>
     <insert id="insertOrderInfo" parameterType="OrderInfo">
         insert into orderinfo(order_no,address_id,miaoshagoods_id,user_account,create_time,buy_count)
@@ -71,9 +75,15 @@
     </insert>
 
     <select id="selectAllInfoByOrderNo" parameterType="String" resultMap="selectAllInfoByOrderNoByMap">
-      SELECT * FROM orderinfo o join address a on o.user_account=a.user_account and o.address_id= a.address_id
+      SELECT *
+      FROM orderinfo o join address a on o.user_account=a.user_account and o.address_id= a.address_id
       join miaosha_goods m on o.miaoshagoods_id=m.miaoshagoods_id
-      join goods g on g.goods_id= m.goods_id WHERE o.order_no=#{order_no}
+      join goods g on g.goods_id= m.goods_id
+      WHERE o.order_no=#{order_no}
     </select>
-
+    <update id="updateOrder" parameterType="OrderInfoVo">
+        update orderinfo
+        set pay_time = #{pay_time},order_pay_no=#{order_pay_no}
+        where order_no=#{order_no}
+    </update>
 </mapper>

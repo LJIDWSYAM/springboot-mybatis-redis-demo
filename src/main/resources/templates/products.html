@@ -41,7 +41,8 @@
 			</ul>
 			<ul class="header-links pull-right">
 				<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-				<li><a href="#"><i class="fa fa-user-o"></i><span th:text="${session.UserInfo.user_name}"></span></a></li>
+				<li><a href="#"><i class="fa fa-user-o"></i><span th:if="${session.UserInfo!=null}"
+				th:text="session.UserInfo.user_name"></span></a></li>
 			</ul>
 		</div>
 	</div>
@@ -373,21 +374,24 @@
 
 <!-- jQuery Plugins -->
 <!-- jQuery Plugins -->
-<script type="text/javascript" th:src="@{js/jquery.min.js}"></script>
-<script type="text/javascript" th:src="@{js/bootstrap.min.js}"></script>
-<script type="text/javascript" th:src="@{js/slick.min.js}"></script>
-<script type="text/javascript" th:src="@{js/nouislider.min.js}"></script>
-<script type="text/javascript" th:src="@{js/jquery.zoom.min.js}"></script>
-<script type="text/javascript" th:src="@{js/main.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/slick.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/nouislider.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.zoom.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
 
-<script>
+<script script th:inline="javascript" type="text/javascript">
+
     //页面完成加载，立即从服务端获取商品数据
     $(function () {
+		//获取项目根路径
+		var ctxPath=[[${#httpServletRequest.getContextPath()}]];
         showGoodsByPageNumber(1);
 
         function showGoodsByPageNumber(pageNum) {
             $.ajax({
-                url:"goods/showGoods",
+                url:ctxPath+"/goods/showGoods",
                 dataType:"json",
                 data:{pageNum:pageNum},
                 success:function (result) {
@@ -409,7 +413,7 @@
                 // alert(goods.goods_price);
 
                 var html = "<div class='col-md-4 col-xs-6'><div class='product'><div class='product-img'>";
-                html+= "<img src='/img/"+goods.goods_img+"'>";
+                html+= "<img src='"+ctxPath+"/img/"+goods.goods_img+"'>";
                 html+= "<input type='hidden' class='idValue' value='"+goods.goods_id+"'>";
                 html += "<div class='product-label'><span class='sale'>-30%</span>";
                 html +="<span class='new'>NEW</span>";
@@ -424,7 +428,7 @@
             }
             $(".product").click(function () {
                 var idValue=$(this).find(".idValue").val();
-                window.location.href="/goods/miaoshaGoods/"+idValue;
+                window.location.href=ctxPath+"/goods/miaoshaGoods/"+idValue;
             });
         }
 

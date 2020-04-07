@@ -24,4 +24,5 @@ public interface OrderDao {
     void reduceMiaoshaGoodsNum(String miaoshagoods_id);
     void insertOrderInfo(OrderInfo orderInfo);
     OrderInfoVo selectAllInfoByOrderNo(String order_no);
+    void updateOrder(OrderInfoVo orderInfoVo);
 }

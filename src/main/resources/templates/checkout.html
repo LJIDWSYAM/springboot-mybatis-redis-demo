@@ -527,13 +527,15 @@
     </script>
     <!--模态框---------------------------------->
 
-    <script>
+	<script th:inline="javascript" type="text/javascript">
         $(function () {
-            $(".order-submit").attr("href","/order/payment?miaoshaGoodsId="+$("#miaoshaGoodsId").val()+"&&address_id="+$("#address_id").val());
+			//获取项目根路径
+			var ctxPath=[[${#httpServletRequest.getContextPath()}]];
+            $(".order-submit").attr("href",ctxPath+"/order/payment?miaoshaGoodsId="+$("#miaoshaGoodsId").val()+"&&address_id="+$("#address_id").val());
             $(".AddressIdParent").click(function () {
                 var thisId=$(this).find(".AddressId").val();
                 $.ajax({
-                    url:"/Address/SelectAddress",
+                    url:ctxPath+"/Address/SelectAddress",
                     data:{address_id:thisId},
                     type:"post",
                     success:function (result) {
@@ -541,7 +543,7 @@
                         $("#reciver_name").val(result.reciver_name);
                         $("#reciver_address").val(result.reciver_address);
                         $("#post_no").val(result.post_no);
-                        $(".order-submit").attr("href","/order/payment?miaoshaGoodsId="+$("#miaoshaGoodsId").val()
+                        $(".order-submit").attr("href",ctxPath+"/order/payment?miaoshaGoodsId="+$("#miaoshaGoodsId").val()
                             +"&&address_id="+result.address_id);
                     }
                 });
@@ -549,14 +551,14 @@
             $("#confirm").click(function () {
 
                 $.ajax({
-                    url:"/Address/insertAddress",
+                    url:ctxPath+"/Address/insertAddress",
                     data:{reciver_name:$("#Newreciver_name").val(),reciver_phone:$("#Newreciver_phone").val(),
                         reciver_address:$("#Newreciver_address").val(),post_no:$("#Newpost_no").val()
                     },
                     type:"post",
                     success:function (result) {
                         if (result) {
-                            window.location.href="/order/buy/"+$("#idValue").val();
+                            window.location.href=ctxPath+"/order/buy/"+$("#idValue").val();
                         }
                     }
                 });

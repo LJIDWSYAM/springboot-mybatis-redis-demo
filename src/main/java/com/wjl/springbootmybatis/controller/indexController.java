@@ -1,9 +1,10 @@
 package com.wjl.springbootmybatis.controller;
 
+
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.RequestMapping;
+
 
 /**
  * \* Created with IntelliJ IDEA.
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * \
  */
 @Controller
+
 public class indexController {
+
     @RequestMapping("/")
     public String regist(){
         return "index";
@@ -32,5 +35,9 @@ public class indexController {
     public String orderInfo(){
         return "orderInfo";
     }
+
+
+
+
 
 }

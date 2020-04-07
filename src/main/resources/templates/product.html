@@ -64,7 +64,7 @@
 						<div class="col-md-3">
 							<div class="header-logo">
 								<a href="#" class="logo">
-									<img src="./img/logo.png" alt="">
+									<img th:src="@{/img/logo.png}" alt="">
 								</a>
 							</div>
 						</div>
@@ -110,7 +110,7 @@
 										<div class="cart-list">
 											<div class="product-widget">
 												<div class="product-img">
-													<img src="img/product01.png" alt="">
+													<img th:src="@{/img/product01.png}" alt="">
 												</div>
 												<div class="product-body">
 													<h3 class="product-name"><a href="#"></a></h3>
@@ -121,7 +121,7 @@
 
 											<div class="product-widget">
 												<div class="product-img">
-													<img src="img/product02.png" alt="">
+													<img th:src="@{/img/product02.png}" alt="">
 												</div>
 												<div class="product-body">
 													<h3 class="product-name"><a href="#">product name goes here</a></h3>
@@ -232,19 +232,19 @@
 					<div class="col-md-2  col-md-pull-5">
 						<div id="product-imgs">
 							<div class="product-preview">
-								<img src="/img/product01.png" alt="">
+								<img th:src="@{/img/product01.png}" alt="">
 							</div>
 
 							<div class="product-preview">
-								<img src="/img/product03.png" alt="">
+								<img th:src="@{/img/product03.png}" alt="">
 							</div>
 
 							<div class="product-preview">
-								<img src="/img/product06.png" alt="">
+								<img th:src="@{/img/product06.png}" alt="">
 							</div>
 
 							<div class="product-preview">
-								<img src="img/product08.png" alt="">
+								<img th:src="@{/img/product08.png}" alt="">
 							</div>
 						</div>
 					</div>
@@ -822,9 +822,10 @@
 		<script th:src="@{/js/jquery.zoom.min.js}"></script>
 		<script th:src="@{/js/main.js}"></script>
 
-        <script>
+		<script th:inline="javascript" type="text/javascript">
             $(function () {
-
+				//获取项目根路径
+				var ctxPath=[[${#httpServletRequest.getContextPath()}]];
                 function formatSeconds(mss) {
                     days = parseInt(mss / (1000 * 60 * 60 * 24));
                     hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -893,14 +894,14 @@
 
                 $("#btnStatus").click(function () {
                     $.ajax({
-                        url:"/user/login_check",
+                        url:ctxPath+"/user/login_check",
                         success:function (result) {
                             if (result){
                                 //检查库存
-                                window.location.href="/order/buy/"+$("#miaoshagoods_id").val();
+                                window.location.href=ctxPath+"/order/buy/"+$("#miaoshagoods_id").val();
                             }else {
                                 alert("请先登录");
-                                window.location.href="/";
+                                window.location.href=ctxPath+"/";
                             }
                         }
                     })
