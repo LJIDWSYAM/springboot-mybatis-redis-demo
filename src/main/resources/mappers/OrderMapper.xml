@@ -21,7 +21,7 @@
             <!--</association>-->
         <!--</resultMap>-->
 
-    <resultMap id="selectAllInfoByOrderNoByMap" type="OrderInfoVo">
+    <resultMap id="selectAllInfoByOrderNoByMap" type="com.wjl.springbootmybatis.entity.OrderDetailInfoVo">
         <id column="order_id" property="order_id"></id>
         <result column="order_no" property="order_no"></result>
         <result column="address_id" property="address_id"></result>
@@ -31,7 +31,7 @@
         <result column="pay_time" property="pay_time"></result>
         <result column="buy_count" property="buy_count"></result>
         <result column="order_pay_no" property="order_pay_no"></result>
-        <association property="goods" javaType="Goods">
+        <association property="goods" javaType="com.wjl.springbootmybatis.entity.Goods">
         <id column="goods_id" property="goods_id"></id>
         <result column="goods_name" property="goods_name"></result>
         <result column="goods_price" property="goods_price"></result>
@@ -39,7 +39,7 @@
         <result column="goods_stock" property="goods_stock"></result>
         <result column="goods_img" property="goods_img"></result>
         </association>
-        <association property="miaoshaGoods" javaType="miaoshaGoods">
+        <association property="miaoshaGoods" javaType="com.wjl.springbootmybatis.entity.MiaoshaGoods">
             <id column="miaoshagoods_id" property="miaoshagoods_id"></id>
             <result column="goods_id" property="goods_id"></result>
             <result column="miaosha_price" property="miaosha_price"></result>
@@ -47,7 +47,7 @@
             <result column="begin_time" property="begin_time"></result>
             <result column="end_time" property="end_time"></result>
         </association>
-        <association property="address" javaType="Address">
+        <association property="address" javaType="com.wjl.springbootmybatis.entity.Address">
             <id column="address_id" property="address_id"></id>
             <result column="reciver_name" property="reciver_name"></result>
             <result column="reciver_phone" property="reciver_phone"></result>
@@ -58,7 +58,7 @@
     </resultMap>
 
 
-    <select id="selectAddressByUserAccount" parameterType="String" resultType="Address">
+    <select id="selectAddressByUserAccount" parameterType="String" resultType="com.wjl.springbootmybatis.entity.Address">
       select *
       from address
       where user_account=#{user_account}
@@ -69,21 +69,35 @@
         set miaosha_stock = miaosha_stock -1
         where miaoshagoods_id =#{miaoshagoods_id} and miaosha_stock>0
     </update>
-    <insert id="insertOrderInfo" parameterType="OrderInfo">
-        insert into orderinfo(order_no,address_id,miaoshagoods_id,user_account,create_time,buy_count)
+    <insert id="insertOrderInfo" parameterType="com.wjl.springbootmybatis.entity.OrderDetailInfo">
+        insert into orderdetailinfo(order_no,address_id,miaoshagoods_id,user_account,create_time,buy_count)
         VALUES(#{order_no},#{address_id},#{miaoshagoods_id},#{user_account},#{create_time},#{buy_count})
     </insert>
 
     <select id="selectAllInfoByOrderNo" parameterType="String" resultMap="selectAllInfoByOrderNoByMap">
       SELECT *
-      FROM orderinfo o join address a on o.user_account=a.user_account and o.address_id= a.address_id
+      FROM orderdetailinfo o join address a on o.user_account=a.user_account and o.address_id= a.address_id
       join miaosha_goods m on o.miaoshagoods_id=m.miaoshagoods_id
       join goods g on g.goods_id= m.goods_id
       WHERE o.order_no=#{order_no}
     </select>
-    <update id="updateOrder" parameterType="OrderInfoVo">
-        update orderinfo
+    <update id="updateOrder" parameterType="com.wjl.springbootmybatis.entity.OrderDetailInfoVo">
+        update orderdetailinfo
         set pay_time = #{pay_time},order_pay_no=#{order_pay_no}
         where order_no=#{order_no}
     </update>
+    <insert id="insertOrder" parameterType="com.wjl.springbootmybatis.entity.Order">
+        insert into `order` (order_no,miaoshagoods_id,user_account,create_time,buy_count,state)
+        VALUES (#{order_no},#{miaoshagoods_id},#{user_account},#{create_time},#{buy_count},#{state})
+    </insert>
+    <select id="isRepeatOrder" parameterType="com.wjl.springbootmybatis.entity.MiaoShaMessage" resultType="com.wjl.springbootmybatis.entity.Order">
+        select *
+        from `order`
+        where user_account=#{user_account}and miaoshagoods_id=#{miaoshagoods_id}
+<!--        and state=1-->
+    </select>
+    <update id="updateOrderState" parameterType="com.wjl.springbootmybatis.entity.MiaoShaMessage">
+        update `order` set state=2 where user_account=#{user_account} and miaoshagoods_id=#{miaoshagoods_id}
+    </update>
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.wjl.springbootmybatis.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  * \* Description:
  * \
  */
-public class UserInfo {
+public class UserInfo implements Serializable {
     private int user_id;
     private String user_account;
     public int getUser_id() {

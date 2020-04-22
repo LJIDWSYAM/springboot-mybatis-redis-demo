@@ -3,7 +3,8 @@ package com.wjl.springbootmybatis.dao;
 
 import com.wjl.springbootmybatis.Utils.Page;
 import com.wjl.springbootmybatis.entity.Goods;
-import com.wjl.springbootmybatis.entity.miaoshaGoods;
+import com.wjl.springbootmybatis.entity.MiaoShaMessage;
+import com.wjl.springbootmybatis.entity.MiaoshaGoods;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,8 @@ public interface GoodsDao {
 
     List<Goods> selectGoodsByPage(Page page);
 
-    miaoshaGoods selectMiaoshaGoods(String goodsId);
+    MiaoshaGoods selectMiaoshaGoods(String goodsId);
+
+    void recoveryStock(MiaoShaMessage miaoShaMessage);
 
 }

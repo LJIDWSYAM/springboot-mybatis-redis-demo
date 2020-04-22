@@ -21,7 +21,7 @@
             </association>
         </resultMap>
 
-        <select id="selectGoods" resultType="goods">
+        <select id="selectGoods" resultType="com.wjl.springbootmybatis.entity.Goods">
             select * from goods
         </select>
 
@@ -30,11 +30,15 @@
       select count(*) from goods
     </select>
 
-    <select id="selectGoodsByPage" parameterType="com.wjl.springbootmybatis.Utils.Page" resultType="goods">
+    <select id="selectGoodsByPage" parameterType="com.wjl.springbootmybatis.Utils.Page" resultType="com.wjl.springbootmybatis.entity.Goods">
             select * from goods limit #{pageIndex},#{pageSize}
     </select>
 
     <select id="selectMiaoshaGoods" parameterType="String" resultMap="selectMiaoshaGoodsByMap">
         select * from goods g join miaosha_goods m on g.goods_id=m.goods_id where g.goods_id=#{id}
     </select>
+
+    <update id="recoveryStock" parameterType="com.wjl.springbootmybatis.entity.MiaoShaMessage">
+        update `miaosha_goods` set miaosha_stock=miaosha_stock+1 where miaoshagoods_id=#{miaoshagoods_id}
+    </update>
 </mapper>

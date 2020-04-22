@@ -1,5 +1,7 @@
 package com.wjl.springbootmybatis.entity;
 
+import java.io.Serializable;
+
 /**
  * \* Created with IntelliJ IDEA.
  * \* User: liujun
@@ -9,7 +11,7 @@ package com.wjl.springbootmybatis.entity;
  * \* Description:
  * \
  */
-public class Address {
+public class Address implements Serializable {
     private int address_id;
     private String reciver_name;
     private String reciver_phone;

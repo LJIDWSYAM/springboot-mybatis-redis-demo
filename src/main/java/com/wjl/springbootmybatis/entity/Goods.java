@@ -1,6 +1,8 @@
 package com.wjl.springbootmybatis.entity;
 
-public class Goods {
+import java.io.Serializable;
+
+public class Goods implements Serializable {
 
     private int goods_id;
 

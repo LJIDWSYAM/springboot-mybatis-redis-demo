@@ -13,5 +13,12 @@ spring:
 mybatis:
   type-aliases-package: com.wjl.springbootmybatis.entity
   mapper-locations: classpath:mappers/*
+  #配置rabbitMq 服务器
+rabbitmq:
+  host: 127.0.0.1
+  port: 5672
+  username: guest
+  password: guest
+  #虚拟host 可以不设置,使用server默认host
 
 

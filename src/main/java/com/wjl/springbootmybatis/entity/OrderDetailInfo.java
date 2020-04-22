@@ -1,53 +1,24 @@
 package com.wjl.springbootmybatis.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * \* Created with IntelliJ IDEA.
  * \* User: liujun
  * \* Date: 2019/6/24
- * \* Time: 19:55
+ * \* Time: 16:50
  * \* To change this template use File | Settings | File Templates.
  * \* Description:
  * \
  */
-public class OrderInfoVo {
-    @Override
-    public String toString() {
-        return "OrderInfoVo{" +
-                "order_id=" + order_id +
-                ", order_no='" + order_no + '\'' +
-                ", address_id=" + address_id +
-                ", miaoshagoods_id=" + miaoshagoods_id +
-                ", user_account='" + user_account + '\'' +
-                ", create_time=" + create_time +
-                ", pay_time=" + pay_time +
-                ", buy_count=" + buy_count +
-                ", order_pay_no='" + order_pay_no + '\'' +
-                ", address=" + address +
-                ", miaoshaGoods=" + miaoshaGoods +
-                ", goods=" + goods +
-                '}';
-    }
-
-    private int order_id;
+public class OrderDetailInfo implements Serializable {
     private String order_no;
     private int address_id;
-
-    public int getOrder_id() {
-        return order_id;
-    }
-
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
-    }
-
     private int miaoshagoods_id;
     private String user_account;
     private Date create_time;
     private Date pay_time;
-    private int buy_count;
-    private String order_pay_no;
 
     public String getOrder_no() {
         return order_no;
@@ -113,31 +84,6 @@ public class OrderInfoVo {
         this.order_pay_no = order_pay_no;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public com.wjl.springbootmybatis.entity.miaoshaGoods getMiaoshaGoods() {
-        return miaoshaGoods;
-    }
-
-    public void setMiaoshaGoods(com.wjl.springbootmybatis.entity.miaoshaGoods miaoshaGoods) {
-        this.miaoshaGoods = miaoshaGoods;
-    }
-
-    public Goods getGoods() {
-        return goods;
-    }
-
-    public void setGoods(Goods goods) {
-        this.goods = goods;
-    }
-
-    private Address address;
-    private miaoshaGoods miaoshaGoods;
-    private Goods goods;
+    private int buy_count;
+    private String order_pay_no;
 }

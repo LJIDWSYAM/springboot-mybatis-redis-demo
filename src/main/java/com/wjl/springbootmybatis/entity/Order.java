@@ -1,5 +1,6 @@
 package com.wjl.springbootmybatis.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,13 +12,13 @@ import java.util.Date;
  * \* Description:
  * \
  */
-public class OrderInfo {
+public class Order implements Serializable {
     private String order_no;
-    private int address_id;
     private int miaoshagoods_id;
     private String user_account;
     private Date create_time;
-    private Date pay_time;
+    private int buy_count;
+    private int state;
 
     public String getOrder_no() {
         return order_no;
@@ -25,14 +26,6 @@ public class OrderInfo {
 
     public void setOrder_no(String order_no) {
         this.order_no = order_no;
-    }
-
-    public int getAddress_id() {
-        return address_id;
-    }
-
-    public void setAddress_id(int address_id) {
-        this.address_id = address_id;
     }
 
     public int getMiaoshagoods_id() {
@@ -59,14 +52,6 @@ public class OrderInfo {
         this.create_time = create_time;
     }
 
-    public Date getPay_time() {
-        return pay_time;
-    }
-
-    public void setPay_time(Date pay_time) {
-        this.pay_time = pay_time;
-    }
-
     public int getBuy_count() {
         return buy_count;
     }
@@ -75,14 +60,23 @@ public class OrderInfo {
         this.buy_count = buy_count;
     }
 
-    public String getOrder_pay_no() {
-        return order_pay_no;
+    public int getState() {
+        return state;
     }
 
-    public void setOrder_pay_no(String order_pay_no) {
-        this.order_pay_no = order_pay_no;
+    public void setState(int state) {
+        this.state = state;
     }
 
-    private int buy_count;
-    private String order_pay_no;
+    @Override
+    public String toString() {
+        return "Order{" +
+                "order_no='" + order_no + '\'' +
+                ", miaoshagoods_id=" + miaoshagoods_id +
+                ", user_account='" + user_account + '\'' +
+                ", create_time=" + create_time +
+                ", buy_count=" + buy_count +
+                ", state=" + state +
+                '}';
+    }
 }

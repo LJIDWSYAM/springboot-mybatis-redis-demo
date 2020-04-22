@@ -198,6 +198,7 @@
 							<li><a href="#">Home</a></li>
 							<li class="active">Checkout</li>
 						</ul>
+						<div id="daojishi"></div>
 					</div>
 				</div>
 				<!-- /row -->
@@ -220,19 +221,15 @@
 								<!--<h3 class="title">Billing address</h3>-->
 
 								<div class="btn-group" role="group">
-									<button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="">
-										<span class=" glyphicon glyphicon-plus" aria-hidden="true"></span> 新增
-									</button>
-									<span id="dizhibianli" th:if="${Address}" th:each="Address,AddressStat:${Address}" >
-										<span class="AddressIdParent">
-											<span class="btn btn-warning" >地址:<span th:text="${AddressStat.index+1}"></span></span>
-											<input type="hidden" class="AddressId" th:value="${Address.address_id}">
-											<input type="hidden"  id="address_id" th:value="${Address.address_id}">
-											<input type="hidden"  id="miaoshaGoodsId" th:value="${miaoshaGoods.miaoshagoods_id}" disabled="disabled">
-										</span>
-									</span>
+										<span th:if="${Address!=null}" th:each="Address,AddressStat:${Address}"  class="AddressIdParent">
+                                        <span class="btn btn-warning">地址:<span th:text="${AddressStat.index}"></span></span>
+                                        <input type="hidden" class="AddressId" th:value="${Address.address_id}">
+                                    	</span>
+                                    <!--模态框--------------------------------------------->
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="">
+                                        <span class=" glyphicon glyphicon-plus" aria-hidden="true"></span> 新增
+                                    </button>
 
-									<!--模态框--------------------------------------------->
                                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
@@ -270,22 +267,22 @@
                                     <!--模态框--------------------------------------------->
 								</div>
 
-							</div>
-
-
-							<div class="form-group">
-								<input class="input" id="reciver_name" type="text" name="reciver_name" placeholder="收货人姓名"  disabled="disabled">
+								<input type="hidden"  id="address_id" th:value="${Address.get(0).address_id}">
+                                <input type="hidden"  id="miaoshaGoodsId" th:value="${miaoshaGoods.miaoshagoods_id}" disabled="disabled">
 							</div>
 							<div class="form-group">
-								<input class="input" id="reciver_address" type="text" name="reciver_address" placeholder="地址"  disabled="disabled">
+								<input class="input" id="reciver_name" type="text" name="reciver_name" placeholder="收货人姓名" th:value="${Address.get(0).reciver_name}" disabled="disabled">
+							</div>
+							<div class="form-group">
+								<input class="input" id="reciver_address" type="text" name="reciver_address" placeholder="地址" th:value="${Address.get(0).reciver_address}" disabled="disabled">
 							</div>
 
                             <div class="form-group">
-                                <input class="input" id="post_no" type="text" name="post_no" placeholder="邮编"  disabled="disabled">
+                                <input class="input" id="post_no" type="text" name="post_no" placeholder="邮编" th:value="${Address.get(0).post_no}" disabled="disabled">
                             </div>
 
 							<div class="form-group">
-								<input class="input" id="reciver_phone" type="tel" name="reciver_phone" placeholder="电话"  disabled="disabled">
+								<input class="input" id="reciver_phone" type="tel" name="reciver_phone" placeholder="电话" th:value="${Address.get(0).reciver_phone}" disabled="disabled">
 							</div>
 							<div class="form-group">
 							</div>
@@ -515,6 +512,7 @@
 		<script th:src="@{/js/nouislider.min.js}"></script>
 		<script th:src="@{/js/jquery.zoom.min.js}"></script>
 		<script th:src="@{/js/main.js}"></script>
+		<input id="timeDifference" th:value="${timeDifference}">
 
 	</body>
     <!--模态框---------------------------------->
@@ -535,6 +533,33 @@
         $(function () {
 			//获取项目根路径
 			var ctxPath=[[${#httpServletRequest.getContextPath()}]];
+			//时间转换函数
+			function formatSeconds(mss) {
+				days = parseInt(mss / (1000 * 60 * 60 * 24));
+				hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+				minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
+				seconds =parseInt((mss % (1000 * 60)) / 1000);
+				// alert(seconds)
+				return days + " 天 " + hours + " 小时 " + minutes + " 分钟 "
+						+ seconds + " 秒 ";
+			}
+			var time;
+			var setIntervalId;
+			function timeDifference(){
+				time = parseInt(time);
+				time -= 1000;
+				$("#daojishi").html("距离支付结束还有:<br>"+formatSeconds(time));
+				if(time <=0){
+					clearInterval(setIntervalId);
+					$("#daojishi").html("");
+					window.location.reload();
+					alert("商品超时未支付无法购买")
+				}
+			}
+			//开始倒计时
+			time = $("#timeDifference").val();
+			setIntervalId = setInterval(timeDifference,1000);
+
             $(".order-submit").attr("href",ctxPath+"/order/payment?miaoshaGoodsId="+$("#miaoshaGoodsId").val()+"&&address_id="+$("#address_id").val());
             $(".AddressIdParent").click(function () {
                 var thisId=$(this).find(".AddressId").val();

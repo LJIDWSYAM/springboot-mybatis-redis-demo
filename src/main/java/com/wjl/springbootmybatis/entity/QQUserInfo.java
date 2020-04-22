@@ -1,6 +1,17 @@
 package com.wjl.springbootmybatis.entity;
 
-public class QQUserInfo {
+import java.io.Serializable;
+
+public class QQUserInfo implements Serializable {
+    private String openId;
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
 
     private Integer ret;
     private String msg;

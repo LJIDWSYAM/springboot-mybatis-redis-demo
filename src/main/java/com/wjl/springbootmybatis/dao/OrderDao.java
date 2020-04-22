@@ -1,12 +1,11 @@
 package com.wjl.springbootmybatis.dao;
 
-import com.wjl.springbootmybatis.entity.Address;
-import com.wjl.springbootmybatis.entity.OrderInfo;
-import com.wjl.springbootmybatis.entity.OrderInfoVo;
+import com.wjl.springbootmybatis.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * \* Created with IntelliJ IDEA.
@@ -22,7 +21,11 @@ import java.util.List;
 public interface OrderDao {
     List<Address> selectAddressByUserAccount(String user_account);
     void reduceMiaoshaGoodsNum(String miaoshagoods_id);
-    void insertOrderInfo(OrderInfo orderInfo);
-    OrderInfoVo selectAllInfoByOrderNo(String order_no);
-    void updateOrder(OrderInfoVo orderInfoVo);
+    void insertOrderInfo(OrderDetailInfo orderdetailInfo);
+    OrderDetailInfoVo selectAllInfoByOrderNo(String order_no);
+    void updateOrder(OrderDetailInfoVo orderInfoVo);
+    void insertOrder(Order order);
+    Order isRepeatOrder(MiaoShaMessage miaoShaMessage);
+    void updateOrderState(MiaoShaMessage miaoShaMessage);
+
 }

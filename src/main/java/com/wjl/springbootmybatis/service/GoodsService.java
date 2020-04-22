@@ -2,7 +2,8 @@ package com.wjl.springbootmybatis.service;
 
 import com.wjl.springbootmybatis.Utils.Page;
 import com.wjl.springbootmybatis.entity.Goods;
-import com.wjl.springbootmybatis.entity.miaoshaGoods;
+import com.wjl.springbootmybatis.entity.MiaoShaMessage;
+import com.wjl.springbootmybatis.entity.MiaoshaGoods;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ public interface GoodsService {
 
     List<Goods>  getAllGoodsByPage(Page page);
 
-    miaoshaGoods selectMiaoshaGoods(String goodsId);
+    MiaoshaGoods selectMiaoshaGoods(String goodsId);
+
+    void recoveryStockAndRedis(MiaoShaMessage miaoShaMessage);
 
 }

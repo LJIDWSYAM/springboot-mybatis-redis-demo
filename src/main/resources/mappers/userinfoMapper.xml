@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wjl.springbootmybatis.dao.UserDao">
-    <select id="selectUserinfoByUserNname" resultType="Userinfo" parameterType="String">
+    <select id="selectUserinfoByUserNname" resultType="com.wjl.springbootmybatis.entity.UserInfo" parameterType="String">
         select * from userinfo where user_account=#{user_account}
     </select>
 
@@ -10,7 +10,7 @@
          VALUES(#{user_name},#{user_pwd},#{regist_time},#{last_login_time},#{user_email},#{user_account})
     </insert>
 
-    <select id="selectUserinfoByUserNameAndPassword" resultType="Userinfo" parameterType="Userinfo">
+    <select id="selectUserinfoByUserNameAndPassword" resultType="com.wjl.springbootmybatis.entity.UserInfo" parameterType="Userinfo">
         select * from userinfo where user_pwd=#{user_pwd} and user_account=#{user_account}
     </select>
 

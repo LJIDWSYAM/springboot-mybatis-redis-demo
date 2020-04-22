@@ -7,7 +7,8 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 
 import com.wjl.springbootmybatis.Utils.AlipayConfig;
-import com.wjl.springbootmybatis.entity.OrderInfoVo;
+import com.wjl.springbootmybatis.entity.MiaoShaMessage;
+import com.wjl.springbootmybatis.entity.OrderDetailInfoVo;
 import com.wjl.springbootmybatis.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -57,9 +58,9 @@ public class AlipayController {
 //       模拟从前台传来的数据
 ////        String orderNo = orderInfo.getOrderNo(); // 生成订单号
 //        String totalAmount = String.valueOf(orderInfo.getMiaoShaGoods().getMiaosha_price()); // 支付总金额
-//        String subject = "商品秒杀订单"; // 订单名称
+//        String subject = "商品秒杀System.out.println订单"; // 订单名称
 //        String body = orderInfo.getMiaoShaGoods().getGoods().getGoods_desc(); // 商品描述
-        OrderInfoVo orderInfoVo=orderService.selectAllInfoByOrderNo(order_no);
+        OrderDetailInfoVo orderInfoVo=orderService.selectAllInfoByOrderNo(order_no);
         String orderNo =orderInfoVo.getOrder_no();//订单编号
         String totalAmount =String.valueOf(orderInfoVo.getMiaoshaGoods().getMiaosha_price());//总价格
         String subject = orderInfoVo.getGoods().getGoods_name(); // 订单名称
@@ -118,13 +119,19 @@ public class AlipayController {
         if (signVerified) {
             String orderNo = params.get("out_trade_no");
             String alipayNo = params.get("trade_no");
-            OrderInfoVo orderInfoVo = new OrderInfoVo();
+            OrderDetailInfoVo orderInfoVo = new OrderDetailInfoVo();
             orderInfoVo.setOrder_no(orderNo);
             orderInfoVo.setOrder_pay_no(alipayNo);
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
             orderInfoVo.setPay_time(df.parse(df.format(new Date())));// new Date()为获取当前系统时间
             orderService.updateOrder(orderInfoVo);
-            OrderInfoVo orderInfoVo2=orderService.selectAllInfoByOrderNo(orderNo);
+            //改变订单状态
+            MiaoShaMessage miaoShaMessage=new MiaoShaMessage();
+            miaoShaMessage.setUser_account(orderInfoVo.getUser_account());
+            miaoShaMessage.setMiaoshagoods_id(String.valueOf(orderInfoVo.getMiaoshagoods_id()));
+            orderService.updateOrderState(miaoShaMessage);
+
+            OrderDetailInfoVo orderInfoVo2=orderService.selectAllInfoByOrderNo(orderNo);
             session.setAttribute("orderInfoVo",orderInfoVo2);
             mav.setViewName("redirect:/orderInfo");
         } else {

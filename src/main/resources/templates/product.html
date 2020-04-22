@@ -268,7 +268,7 @@
 							</div>
 							<div>
 								<h3 class="product-price"><span th:text="${miaoShaGoods.miaosha_price}"></span> <del class="product-old-price">$990.00</del></h3>
-								<span class="product-available">剩余:<span th:text="${miaoShaGoods.miaosha_stock}"></span></span>
+								<span class="product-available">剩余:<span id="Surplus" th:text="${miaoShaGoods.miaosha_stock}"></span></span>
 							</div>
 							<p> <span th:text="${miaoShaGoods.goods.goods_desc}"></span></p>
 
@@ -892,19 +892,73 @@
                     setIntervalId = setInterval(endDaojishi,1000);
                 }
 
+				//检查是否登录
+				function isLogin(){
+					$.ajax({
+						url:ctxPath+"/user/login_check",
+						success:function (result) {
+							if (result){
+								doMiaoSha();
+							}
+							else {
+								alert("请先登录");
+								window.location.href=ctxPath+"/";
+							}
+						}
+					})
+				}
+                //轮询查询秒杀结果
+				function getMiaoShaResult(goodid){
+					$.ajax({
+						url:ctxPath+"/order/miaoShaResult/"+goodid,
+						success:function (result) {
+							if (result.data!="1"){
+								//秒杀成功跳转支付页面
+                                window.location.href=ctxPath+"/order/buyNotInTime/"+goodid;
+							}
+							else {
+								//继续轮询
+								setTimeout(function () {
+									getMiaoShaResult(goodid);
+								},50)
+							}
+						}
+
+					})
+                }
+                //开始秒杀
+				function doMiaoSha(){
+					$.ajax({
+						url:ctxPath+"/order/doMiaosha/"+$("#miaoshagoods_id").val(),
+						success:function (result) {
+							if (result.code==0){
+								alert(result.data);
+								//调用轮询查询
+								getMiaoShaResult($("#miaoshagoods_id").val());
+
+							}else if (result.code==5002){
+								alert(result.msg);
+								$("#btnStatus").css({'background-color' : 'gray'});
+								$("#btnStatus").attr("disabled", true);
+								$("#Surplus").text('0');
+							}
+							else if(result.code==5003){//限购一件
+								alert(result.msg)
+
+							}
+							else if(result.code==5004){//未完成支付
+								alert(result.msg);
+								window.location.href=ctxPath+"/order/buyNotInTime/"+$("#miaoshagoods_id").val();
+								// window.location.href=ctxPath+"/order/buy/"+$("#miaoshagoods_id").val();
+							}
+							else if(result.code==5005){//超时
+								alert(result.msg)
+							}
+						}
+					})
+				}
                 $("#btnStatus").click(function () {
-                    $.ajax({
-                        url:ctxPath+"/user/login_check",
-                        success:function (result) {
-                            if (result){
-                                //检查库存
-                                window.location.href=ctxPath+"/order/buy/"+$("#miaoshagoods_id").val();
-                            }else {
-                                alert("请先登录");
-                                window.location.href=ctxPath+"/";
-                            }
-                        }
-                    })
+                	isLogin();
                 });
 
             });

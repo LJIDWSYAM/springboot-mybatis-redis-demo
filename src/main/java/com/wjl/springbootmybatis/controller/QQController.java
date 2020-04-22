@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import com.wjl.springbootmybatis.Utils.URLEncodeUtil;
 import com.wjl.springbootmybatis.config.Constants;
 import com.wjl.springbootmybatis.entity.QQUserInfo;
+import com.wjl.springbootmybatis.service.QQService;
 import org.apache.commons.lang3.StringUtils;
 import com.wjl.springbootmybatis.Utils.HttpClientUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,8 @@ public class QQController {
      */
     @Autowired
     private Constants constants;
-
+    @Autowired
+    QQService qqService;
 
 
     /**
@@ -69,14 +71,13 @@ public class QQController {
      *
      * @param code
      * @param
-     * @param 实际业务：token过期调用刷新    token重新获取token信息
-     * @param 数据库字段: accessToken，expiresIn，refreshToken，openId
+     * @param ：token过期调用刷新    token重新获取token信息
+     * @param : accessToken，expiresIn，refreshToken，openId
      * @return
      * @throws Exception
      */
     @GetMapping("/QQLogin")
-    @ResponseBody
-    public QQUserInfo QQLogin(String code, Model model) throws Exception {
+    public String QQLogin(String code, Model model) throws Exception {
         //获取tocket
         Map<String, Object> qqProperties = getToken(code);
         //获取openId(每个用户的openId都是唯一不变的)
@@ -88,13 +89,17 @@ public class QQController {
 
         //获取数据
         QQUserInfo	userInfo =  getUserInfo(qqProperties);
-        return userInfo;
+        userInfo.setOpenId(openId);
+        //向数据库里插入qq用户信息
+        qqService.insertintoQquserInfo(userInfo);
+
+        return "redirect:/listProducts";
     }
 
     /**
      * 获得token信息（授权，每个用户的都不一致） --> 获得token信息该步骤返回的token期限为一个月
      *
-     * @param (保存到Map<String,String> qqProperties)
+     * @param (<String,String> qqProperties)
      * @author wangsong
      * @return
      * @throws Exception
@@ -158,7 +163,7 @@ public class QQController {
     /**
      * 获取用户openId（根据token）
      *
-     * @param 把openId存到map中
+     * @param
      * @return
      * @throws Exception
      */

@@ -198,6 +198,7 @@
 							<li><a href="#">Home</a></li>
 							<li class="active">Checkout</li>
 						</ul>
+						<div id="daojishi"></div>
 					</div>
 				</div>
 				<!-- /row -->
@@ -366,7 +367,10 @@
 								I've read and accept the <a href="#">terms & conditions</a>
 							</label>
 						</div>
-						<a href="#" class="primary-btn order-submit">立即支付</a>
+<!--						<a href="#" class="primary-btn order-submit"></a>-->
+						<input id="changAddressValue" type="hidden">
+						<input id="lijizhifu" class="primary-btn order-submit" type="button" value="立即支付">
+
 					</div>
 					<!-- /Order Details -->
 				</div>
@@ -515,6 +519,7 @@
 		<script th:src="@{/js/nouislider.min.js}"></script>
 		<script th:src="@{/js/jquery.zoom.min.js}"></script>
 		<script th:src="@{/js/main.js}"></script>
+		<input id="timeDifference" th:value="${timeDifference}">
 
 	</body>
     <!--模态框---------------------------------->
@@ -535,7 +540,43 @@
         $(function () {
 			//获取项目根路径
 			var ctxPath=[[${#httpServletRequest.getContextPath()}]];
-            $(".order-submit").attr("href",ctxPath+"/order/payment?miaoshaGoodsId="+$("#miaoshaGoodsId").val()+"&&address_id="+$("#address_id").val());
+			//时间转换函数
+			function formatSeconds(mss) {
+				days = parseInt(mss / (1000 * 60 * 60 * 24));
+				hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+				minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
+				seconds =parseInt((mss % (1000 * 60)) / 1000);
+				// alert(seconds)
+				return days + " 天 " + hours + " 小时 " + minutes + " 分钟 "
+						+ seconds + " 秒 ";
+			}
+			var time;
+			var setIntervalId;
+			function timeDifference(){
+				time = parseInt(time);
+				time -= 1000;
+				$("#daojishi").html("距离支付结束还有:<br>"+formatSeconds(time));
+				if(time <=0){
+					clearInterval(setIntervalId);
+					$("#daojishi").html("");
+					alert("商品超时未支付无法购买");
+					window.location.href=ctxPath+"/";
+				}
+			}
+			//开始倒计时
+			time = $("#timeDifference").val();
+			setIntervalId = setInterval(timeDifference,1000);
+
+			$("#lijizhifu").click(function () {
+				if($("#reciver_name").val()==null || 	$("#reciver_name").val()==""){
+					alert("请在左侧输入地址信息或选择地址");
+					window.location.reload();
+				}else {
+					window.location.href=ctxPath+"/order/payment?miaoshaGoodsId="+$("#miaoshaGoodsId").val()+"&&address_id="+$("#changAddressValue").val();
+				}
+				// $(".order-submit").attr("href",ctxPath+"/order/payment?miaoshaGoodsId="+$("#miaoshaGoodsId").val()+"&&address_id="+$("#address_id").val());
+			})
+
             $(".AddressIdParent").click(function () {
                 var thisId=$(this).find(".AddressId").val();
                 $.ajax({
@@ -547,8 +588,9 @@
                         $("#reciver_name").val(result.reciver_name);
                         $("#reciver_address").val(result.reciver_address);
                         $("#post_no").val(result.post_no);
-                        $(".order-submit").attr("href",ctxPath+"/order/payment?miaoshaGoodsId="+$("#miaoshaGoodsId").val()
-                            +"&&address_id="+result.address_id);
+						$("#changAddressValue").val(thisId)
+                        // $(".order-submit").attr("href",ctxPath+"/order/payment?miaoshaGoodsId="+$("#miaoshaGoodsId").val()
+                        //     +"&&address_id="+result.address_id);
                     }
                 });
             });
@@ -562,7 +604,8 @@
                     type:"post",
                     success:function (result) {
                         if (result) {
-                            window.location.href=ctxPath+"/order/buy/"+$("#idValue").val();
+                            // window.location.href=ctxPath+"/order/buy/"+$("#idValue").val();
+							window.location.reload();
                         }
                     }
                 });

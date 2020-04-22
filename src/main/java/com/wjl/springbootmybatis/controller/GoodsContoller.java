@@ -4,7 +4,7 @@ package com.wjl.springbootmybatis.controller;
 import com.wjl.springbootmybatis.Utils.Page;
 import com.wjl.springbootmybatis.Utils.RedisUtil;
 import com.wjl.springbootmybatis.entity.Goods;
-import com.wjl.springbootmybatis.entity.miaoshaGoods;
+import com.wjl.springbootmybatis.entity.MiaoshaGoods;
 import com.wjl.springbootmybatis.service.GoodsService;
 import com.wjl.springbootmybatis.vo.GoodsPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 
@@ -51,10 +50,11 @@ public class GoodsContoller {
 
         return goodsPage;
     }
-
+    /*
+    * */
     @GetMapping("/miaoshaGoods/{goodsId}")
     public ModelAndView selectMiaoshaGoods(@PathVariable("goodsId") String goodsId,ModelAndView modelAndView){
-        miaoshaGoods miaoshaGoods=goodsService.selectMiaoshaGoods(goodsId);
+        MiaoshaGoods miaoshaGoods=goodsService.selectMiaoshaGoods(goodsId);
         Long beginTime=miaoshaGoods.getBegin_time().getTime();
         Long endTime=miaoshaGoods.getEnd_time().getTime();
         long nowTime=new Date().getTime();

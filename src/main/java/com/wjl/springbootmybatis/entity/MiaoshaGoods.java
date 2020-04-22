@@ -1,5 +1,6 @@
 package com.wjl.springbootmybatis.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -12,7 +13,7 @@ import java.util.Date;
  * \* Description:
  * \
  */
-public class miaoshaGoods {
+public class MiaoshaGoods implements Serializable {
     private int miaoshagoods_id;
     private int goods_id;
     private BigDecimal miaosha_price;
