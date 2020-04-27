@@ -14,4 +14,10 @@ public class QQServiceInfoImpl implements QQService {
     public void insertintoQquserInfo(QQUserInfo qqUserInfo) {
         qqDao.insertintoQquserInfo(qqUserInfo);
     }
+
+    @Override
+    public QQUserInfo selectQuserInfoByOpenid(String openid) {
+        QQUserInfo qqUserInfo=qqDao.selectQuserInfoByOpenid(openid);
+        return qqUserInfo;
+    }
 }

@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface QQDao {
      void insertintoQquserInfo(QQUserInfo qqUserInfo);
+     QQUserInfo selectQuserInfoByOpenid(String openId);
 }

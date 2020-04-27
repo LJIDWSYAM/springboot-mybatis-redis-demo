@@ -929,7 +929,8 @@
                 //开始秒杀
 				function doMiaoSha(){
 					$.ajax({
-						url:ctxPath+"/order/doMiaosha/"+$("#miaoshagoods_id").val(),
+						data:{miaoshagoods_id:$("#miaoshagoods_id").val()},
+						url:ctxPath+"/order/doMiaosha",
 						success:function (result) {
 							if (result.code==0){
 								alert(result.data);

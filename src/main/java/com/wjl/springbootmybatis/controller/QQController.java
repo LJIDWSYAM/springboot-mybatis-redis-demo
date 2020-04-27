@@ -8,7 +8,9 @@ import javax.servlet.http.HttpSession;
 import com.wjl.springbootmybatis.Utils.URLEncodeUtil;
 import com.wjl.springbootmybatis.config.Constants;
 import com.wjl.springbootmybatis.entity.QQUserInfo;
+import com.wjl.springbootmybatis.entity.UserInfo;
 import com.wjl.springbootmybatis.service.QQService;
+import com.wjl.springbootmybatis.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import com.wjl.springbootmybatis.Utils.HttpClientUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +79,7 @@ public class QQController {
      * @throws Exception
      */
     @GetMapping("/QQLogin")
-    public String QQLogin(String code, Model model) throws Exception {
+    public String QQLogin(String code, Model model,HttpSession session) throws Exception {
         //获取tocket
         Map<String, Object> qqProperties = getToken(code);
         //获取openId(每个用户的openId都是唯一不变的)
@@ -91,8 +93,13 @@ public class QQController {
         QQUserInfo	userInfo =  getUserInfo(qqProperties);
         userInfo.setOpenId(openId);
         //向数据库里插入qq用户信息
-        qqService.insertintoQquserInfo(userInfo);
-
+        QQUserInfo qqUserInfo=qqService.selectQuserInfoByOpenid(openId);
+        if (qqUserInfo==null){
+            qqService.insertintoQquserInfo(userInfo);
+        }
+        UserInfo userInfo1=new UserInfo();
+        userInfo1.setUser_account(openId);
+        session.setAttribute("UserInfo",userInfo1);
         return "redirect:/listProducts";
     }
 

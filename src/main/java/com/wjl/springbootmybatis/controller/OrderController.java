@@ -54,8 +54,8 @@ public class OrderController {
     /*
      * 生成订单前先检查库存是否足够*/
     @ResponseBody
-    @RequestMapping("/doMiaosha/{miaoshagoods_id}")
-    public Result<String> checkGoodsStock(@PathVariable("miaoshagoods_id")String miaoshagoods_id,HttpSession session){
+    @RequestMapping("/doMiaosha")
+    public Result<String> checkGoodsStock(String miaoshagoods_id,HttpSession session){
         UserInfo userInfo = (UserInfo) session.getAttribute("UserInfo");
         String user_account = userInfo.getUser_account();
         MiaoShaMessage miaoShaMessage=new MiaoShaMessage();

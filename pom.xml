@@ -73,6 +73,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <!--手机短信-->
+        <!-- fastjosn -->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>fastjson</artifactId>-->
+<!--            <version>1.2.4</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.zhenzikj</groupId>-->
+<!--            <artifactId>zhenzisms</artifactId>-->
+<!--            <version>1.0.2</version>-->
+<!--        </dependency>-->
 
 
 
